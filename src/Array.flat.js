@@ -1,6 +1,6 @@
 Array.prototype.mflat = function () {
-  if (!this) {
-    throw new Error("Can't work on null or undefined");
+  if (!this || !Array.isArray(this)) {
+    throw new Error("Invalid input");
   }
   var res = [];
   var len = this.length;
