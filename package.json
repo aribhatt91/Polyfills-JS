@@ -4,6 +4,7 @@
   "description": "A repository of custom implementation of popular JS functions ",
   "main": "index.html",
   "scripts": {
+    "test": "jest --watchAll --noStackTrace",
     "start": "parcel index.html --open",
     "build": "parcel build index.html"
   },
@@ -16,5 +17,15 @@
   "resolutions": {
     "@babel/preset-env": "7.13.8"
   },
-  "keywords": []
+  "keywords": [],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/aribhatt91/Polyfills-JS.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/aribhatt91/Polyfills-JS/issues"
+  },
+  "homepage": "https://github.com/aribhatt91/Polyfills-JS#readme"
 }
