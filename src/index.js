@@ -1,3 +1,4 @@
+'use strict'
 import MyPromise from './Promises/MyPromise';
 
 document.getElementById("app").innerHTML = `
@@ -51,3 +52,10 @@ new MyPromise((resolve) => {
   console.log(data);
 });
 
+
+console.log('logging this from outside ', this);
+function fn(){
+  console.log('logging this from fn ', this);
+}
+
+fn();

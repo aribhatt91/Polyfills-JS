@@ -8,7 +8,6 @@ class MyPromise {
     
     #state;
     #value;
-    #error;
     #onSuccessChain = [];
     #onFailureChain = [];
     #onSuccessBind = this.#onSuccess.bind(this);
@@ -34,13 +33,18 @@ class MyPromise {
     #runCallbacks(){
         /* Async operations */
         if(this.#onSuccessChain.length && this.#state === STATE_MAP.RESOLVED){
-            this.#onSuccessChain.reduce((acc, fn) => {
-                console.log('async exec')
-                return fn(acc);
-            }, this.resolvedData);
+            this.#onSuccessChain.forEach( callback => {
+                callback(this.#value)
+            })
+
+            this.#onSuccessChain = [];
         }
         else if(this.#onFailureChain.length && this.#state === STATE_MAP.REJECTED){
-            this.#onFailureChain.reduce((acc, fn) => fn(acc), this.rejectedData);
+            this.#onFailureChain.forEach( callback => {
+                callback(this.#value)
+            })
+
+            this.#onFailureChain = [];
         }
     }
     #onSuccess(value){
@@ -52,7 +56,7 @@ class MyPromise {
             /* In case where a promise is returned from another promise */
             if(value instanceof MyPromise){
                 value.then(this.#onSuccessBind, this.#onFailureBind);
-                return
+                return;
             }
 
             this.#value = value;
@@ -79,7 +83,7 @@ class MyPromise {
     
             
             this.#state = STATE_MAP.REJECTED;
-            this.#error = value;
+            this.#value = value;
             this.#runCallbacks();
         })
     }
