@@ -4,7 +4,7 @@
   "description": "A repository of custom implementation of popular JS functions ",
   "main": "index.html",
   "scripts": {
-    "test": "jest --watchAll --noStackTrace",
+    "test": "vitest --globals",
     "start": "parcel index.html --open",
     "build": "parcel build index.html"
   },
@@ -12,7 +12,10 @@
     "parcel-bundler": "^1.6.1"
   },
   "devDependencies": {
-    "@babel/core": "7.2.0"
+    "@babel/core": "7.2.0",
+    "nodemon": "^2.0.19",
+    "puppeteer": "^16.1.0",
+    "vitest": "^0.21.1"
   },
   "resolutions": {
     "@babel/preset-env": "7.13.8"

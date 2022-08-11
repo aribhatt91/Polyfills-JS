@@ -52,10 +52,16 @@ new MyPromise((resolve) => {
   console.log(data);
 });
 
+/* const obj = {
+  a: 2,
+  fn: () => {
+    console.log('value of a', this.a)
+  }
+}
 
 console.log('logging this from outside ', this);
 function fn(){
   console.log('logging this from fn ', this);
 }
 
-fn();
+obj.fn(); */
