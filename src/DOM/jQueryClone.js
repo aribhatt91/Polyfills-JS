@@ -1,23 +1,27 @@
 class ElementCollection extends Array {
-    constructor(args){
-        super(args);
-        this.on = this.#onUnbound;
-        this.css = this.#cssUnbound.bind(this);
-        this.addClass = this.#addClassUnbound.bind(this);
-        this.removeClass = this.#removeClassUnbound.bind(this);
-        this.find = this.#findUnbound.bind(this);
-        this.ready = this.#readyUnbound.bind(this);
-    }
+
+    on = this.#onUnbound;
+    css = this.#cssUnbound.bind(this);
+    addClass = this.#addClassUnbound.bind(this);
+    removeClass = this.#removeClassUnbound.bind(this);
+    find = this.#findUnbound.bind(this);
+    ready = this.#readyUnbound.bind(this);
+    prev = this.#prevUnbound.bind(this);
+    next = this.#nextUnbound.bind(this);
+    get = this.#getUnbound.bind(this);
 
     #readyUnbound(callback){
-        const isReady = this.some(e => {
-            return e.readyState !== null && e.readyState !== 'loading';
-        })
-        if(isReady){
-            callback();
-        }else {
-            this.on('DOMContentLoaded', callback);
+        if(typeof callback === 'function'){
+            const isReady = this.some(e => {
+                return e.readyState !== null && e.readyState !== 'loading';
+            })
+            if(isReady){
+                callback();
+            }else {
+                this.on('DOMContentLoaded', callback);
+            }
         }
+        
         return this;
     }
 
@@ -36,22 +40,24 @@ class ElementCollection extends Array {
         return this;
     }
 
-    next(){
+    #nextUnbound(){
         return this.map(elem => elem.nextElementSibling).filter(elem => elem !== null);
     }
 
-    prev(){
+    #prevUnbound(){
         return this.map(elem => elem.previousElementSibling).filter(elem => elem !== null);
     }
 
-    get(index){
+    #getUnbound(index=0){
         return this[index];
     }
 
     #addClassUnbound(className){
-        this.forEach(elem => {
-            elem.classList.add(className);
-        })
+        if(className){
+            this.forEach(elem => {
+                elem.classList.add(className);
+            })
+        }
         return this;
     }
 
@@ -63,9 +69,15 @@ class ElementCollection extends Array {
     }
 
     #cssUnbound(key, value){
-        this.forEach(elem => {
-            elem.style[key] = value;
-        })
+        if(key){
+            const camelProp = key.replace(/(-[a-z])/, g => {
+                return g.replace('-', '').toUpperCase();
+            })
+            this.forEach(elem => {
+                elem.style[camelProp] = value;
+            })
+        }
+        
         return this;
     }
 
@@ -78,12 +90,14 @@ class ElementCollection extends Array {
 }
 function jQueryClone(param){
     if(typeof param === 'string' || param instanceof String) {
-        return new ElementCollection(...document.querySelectorAll(param));
+        return new ElementCollection(...(document.querySelectorAll(param)));
     }else if(param instanceof HTMLElement || param instanceof Element) {
         return new ElementCollection(param);
     }else {
         throw Error('jQueryClone function takes an argument of type string or elemnt')
     }
 }
+
+jQueryClone.get = ({url, data={}, success, dataType, error}) => {}
 
 exports.module = jQueryClone;
