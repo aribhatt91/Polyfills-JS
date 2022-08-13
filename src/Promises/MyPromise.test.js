@@ -1,5 +1,5 @@
-//const MyPromise = require("./MyPromise.js")
-const MyPromise = Promise
+const MyPromise = require("./MyPromise.js");
+//const MyPromise = Promise
 
 const DEFAULT_VALUE = "default"
 
@@ -111,8 +111,8 @@ describe("static methods", () => {
   it("allSettled", () => {
     return MyPromise.allSettled([promise(), promise({ fail: true })]).then(v =>
       expect(v).toEqual([
-        { status: "fulfilled", value: DEFAULT_VALUE },
-        { status: "rejected", reason: DEFAULT_VALUE },
+        { state: "fulfilled", value: DEFAULT_VALUE },
+        { state: "rejected", reason: DEFAULT_VALUE },
       ])
     )
   })
@@ -148,6 +148,14 @@ describe("static methods", () => {
     })
   })
 })
+
+describe('async-await', () => {
+  it("with success", async () => {
+    const p = await promise();
+    return expect(p).toEqual(DEFAULT_VALUE);
+  })
+});
+
 
 function promise({ value = DEFAULT_VALUE, fail = false } = {}) {
   return new MyPromise((resolve, reject) => {

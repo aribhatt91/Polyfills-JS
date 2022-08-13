@@ -52,6 +52,16 @@ new MyPromise((resolve) => {
   console.log(data);
 });
 
+const asyncTest = async () => {
+  const p = await (new MyPromise((res) => {
+    res(200);
+  }));
+
+  console.log(p);
+}
+
+asyncTest();
+
 /* const obj = {
   a: 2,
   fn: () => {
@@ -65,3 +75,30 @@ function fn(){
 }
 
 obj.fn(); */
+
+const generateHash = (args = []) => {
+  return args.join('||');
+}
+const memoize = () => {
+  const cache = {};
+
+  return (fn, args) => {
+    const key = generateHash(args.concat(fn.name));
+    if(key && !cache.hasOwnProperty(key)) {
+      cache[key] = fn.apply(null, args);
+    }
+    return cache[key];
+  }
+}
+
+const multiply = (a, b) => a*b,
+add = (a, b) => a+b;
+
+const Memoize = memoize();
+const result1 = Memoize(multiply, [2,3]),
+result2 = Memoize(add, [2,3]),
+result3 = Memoize(multiply, [2,3]),
+result4 = Memoize(add, [2,3]);
+
+console.log(result1, result2);
+console.log(result3, result4);

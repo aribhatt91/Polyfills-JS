@@ -4,7 +4,7 @@
   "description": "A repository of custom implementation of popular JS functions ",
   "main": "index.html",
   "scripts": {
-    "test": "vitest --globals",
+    "test": "jest --watch --coverage verbose --clearCache",
     "start": "parcel index.html --open",
     "build": "parcel build index.html"
   },

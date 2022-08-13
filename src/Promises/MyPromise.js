@@ -1,7 +1,7 @@
 const STATE_MAP = {
-    PENDING: 0,
-    RESOLVED: 1,
-    REJECTED: 2
+    PENDING: 'pending',
+    RESOLVED: 'fulfilled',
+    REJECTED: 'rejected'
 };
 class MyPromise {
     
@@ -20,9 +20,6 @@ class MyPromise {
         try{
             /* Set state to pending */
             this.#state = STATE_MAP.PENDING;
-            if(!executor || typeof executor !== 'function'){
-                throw new Error('Expecting a function as an argument, received ', typeof executor);
-            }
             executor(this.#onSuccessBind, this.#onFailureBind);
         }catch(error) {
             this.#onFailure(error);
@@ -77,7 +74,7 @@ class MyPromise {
             }
 
             // If no catch method is chained and a rejection occurs
-            if(!this.#onFailureChain.length) {
+            if(this.#onFailureChain.length === 0) {
                 throw new UncaughtPromiseError(value);
             }
     
@@ -92,7 +89,7 @@ class MyPromise {
 
             this.#onSuccessChain.push(result => {
                 /* If no futher then is chained to the current one */
-                if(thenFn === null) {
+                if(!thenFn || typeof thenFn !== 'function') {
                     resolve(result);
                     return;
                 }
@@ -106,7 +103,7 @@ class MyPromise {
 
             this.#onFailureChain.push(result => {
                 /* If no futher then is chained to the current one */
-                if(catchFn === null) {
+                if(!catchFn || typeof catchFn !== 'function') {
                     reject(result);
                     return;
                 }
@@ -136,7 +133,7 @@ class MyPromise {
             },
             (result) => {
                 fn();
-                return result;
+                throw result;
             }
         )
     }
@@ -201,7 +198,7 @@ class MyPromise {
         })
     }
 
-    any(){
+    static any(promises){
         const errors = [];
         let rejectedPromises = 0;
 
@@ -213,14 +210,14 @@ class MyPromise {
                     rejectedPromises++;
                     errors[i] = error;
                     if(rejectedPromises === promises.length){
-                        reject(errors);
+                        reject(new AggregateError(errors, "All promises were rejected"));
                     }
                 });
             }
         })
     }
 
-    race(){
+    static race(promises){
 
         return new MyPromise((resolve, reject) => {
             promises.forEach(promise => {
@@ -232,10 +229,10 @@ class MyPromise {
 
 /* TODO - what is this.stack? */
 class UncaughtPromiseError extends Error {
-    constructor(value) {
+    constructor(error) {
         super(error);
         this.stack = `(in stack) ${error.stack}`
     }
 }
 
-export default MyPromise;
+module.exports = MyPromise;
