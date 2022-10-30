@@ -23,14 +23,14 @@ A value to which previousValue is initialized the first time the callback is cal
 Array.prototype.mReduce = function(callbackFn, initialValue) {
     
     if(!callbackFn || typeof callbackFn !== 'function') {
-        throw new Error('Callback function not found');
+        throw new TypeError(callbackFn + ' is not a function');
     }
     if(callbackFn.length < 1){
-        throw new Error('Callback function must have atleast one parameter');
+        return;
     }
     if(this.length === 0) {
         if(typeof initialValue === 'undefined'){
-            throw new TypeError('The array contains no elements and initialValue is not provided.');
+            throw new TypeError('Reduce of empty array with no initial value');
         }else {
             return initialValue;
         }
