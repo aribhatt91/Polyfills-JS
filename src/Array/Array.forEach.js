@@ -6,6 +6,9 @@ Array.prototype.mforEach = function (fn, ...args) {
     throw new Error("Callback function must accept 1 or more arguments");
   }
   for (let i = 0; i < this.length; i++) {
+    if(typeof this[i] === 'undefined'){
+      continue;
+  }
     fn.call(this, this[i], i, this);
   }
 };

@@ -21,6 +21,9 @@ Array.prototype.mMap = function(callbackFn, thisArg) {
     }
     for (let index = 0; index < this.length; index++) {
         const element = this[index];
+        if(typeof this[index] === 'undefined'){
+            continue;
+        }
         results.push(callbackFn.call(thisArg || this, element, index, this));
     }
     return results;

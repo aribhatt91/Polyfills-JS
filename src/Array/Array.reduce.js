@@ -42,7 +42,7 @@ Array.prototype.mReduce = function(callbackFn, initialValue) {
     currentValue;
 
     for (let index = 0; index < this.length; index++) {
-        if(index === 0 && typeof initialValue === 'undefined'){
+        if((index === 0 && typeof initialValue === 'undefined') || typeof this[index] === 'undefined'){
             continue;
         }
         currentValue = this[index];
