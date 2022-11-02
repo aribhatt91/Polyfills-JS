@@ -1,12 +1,12 @@
 const mStringify = (obj) => {
+    if(typeof obj === 'object' && obj !== null && typeof obj.toJSON === 'function') {
+        obj = obj.toJSON();
+    }
     if(typeof obj === 'undefined' || typeof obj === 'function' || typeof obj === 'symbol'){
         return
     }
     else if(obj === null || typeof obj === "number" || typeof obj === 'string' || typeof obj === 'boolean'){
         return typeof obj === 'string' ? `"${obj.replace(/"/g, '\\"')}"` : `${obj}`;
-    }
-    else if(obj instanceof Date) {
-        return `"${obj.toISOString()}"`;
     }
 
     const isArray = Array.isArray(obj);
